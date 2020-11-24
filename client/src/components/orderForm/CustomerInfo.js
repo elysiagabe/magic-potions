@@ -20,18 +20,27 @@ import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import FormSectionHeader from './FormSectionHeader';
 import StateSelect from './StateSelect';
 
-const CustomerInfo = ({ setOpenIndex }) => {
+const CustomerInfo = ({ setOpenIndex, formValues, setFormValues }) => {
     const { handleSubmit, errors, register } = useForm();
 
     const customerIndex = 1;
 
     const handleClick = (values) => {
-        console.log("Clicked!")
+        setFormValues({
+            ...formValues,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            phone: values.phone,
+            address: {
+                street1: values.street1,
+                street2: values.street2,
+                city: values.city,
+                state: values.state,
+                zip: values.zip
+            }
+        })
         setOpenIndex(customerIndex + 1)
-
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2))
-        }, 500)
     }
 
     return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { 
     Box, 
@@ -22,19 +22,25 @@ import {
 import FormSectionHeader from './FormSectionHeader';
 import PotionImg from '../../assets/potion.png';
 
-const ProductInfo = ({ setOpenIndex }) => {
-    const { handleSubmit, errors, register} = useForm();
+const ProductInfo = ({ setOpenIndex, formValues, setFormValues }) => {
+    const { handleSubmit, errors, register } = useForm();
 
     const productIndex = 0;
 
-    // TODO: UPDATE CLICK HANDLER
     const handleClick = (values) => {
-        console.log("Click")
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2))
-        }, 500)
-        setOpenIndex(Number(productIndex) + 1)
+        console.log(values)
+        setFormValues({ 
+            ...formValues, 
+            quantity: Number(values.quantity), 
+            total: (values.quantity*49.99).toString(),
+        })
+        setOpenIndex(productIndex + 1)
     }
+
+    useEffect(() => {
+        // setTotal(formValues.total)
+        console.log(formValues)
+    }, [formValues, setFormValues])
 
     return (
         <Box bg="white" mb={4} boxShadow="xs" >
@@ -76,7 +82,7 @@ const ProductInfo = ({ setOpenIndex }) => {
                         </FormControl>
 
                         {/* TODO: MAKE DYNAMIC! */}
-                        <Text mt={8} ><Box as="span" fontWeight="500">Total:</Box> $49.99</Text>
+                        {/* <Text mt={8} ><Box as="span" fontWeight="500">Total:</Box> {}</Text> */}
                     </Box>
 
                 </Flex>

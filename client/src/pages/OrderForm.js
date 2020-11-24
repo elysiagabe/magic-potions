@@ -11,18 +11,38 @@ import PaymentInfo from '../components/orderForm/PaymentInfo';
 
 const OrderForm = () => {
     const [openIndex, setOpenIndex] = useState(0)
+    const [formValues, setFormValues] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        quantity: 1,
+        total: '',
+        address: {
+            street1: '',
+            street2: '',
+            city: '',
+            state: '',
+            zip: ''
+        },
+        payment: {
+            ccNum: '',
+            exp: ''
+        }
+
+    })
 
     return (
         <Box w={1/2} maxW="1024px"  mx="auto" py={10}>
             <Accordion index={[openIndex]} allowToggle >
                 <AccordionItem>
-                    <ProductInfo setOpenIndex={setOpenIndex} />
+                    <ProductInfo setOpenIndex={setOpenIndex} formValues={formValues} setFormValues={setFormValues} />
                 </AccordionItem>
                 <AccordionItem>
-                    <CustomerInfo setOpenIndex={setOpenIndex} />
+                    <CustomerInfo setOpenIndex={setOpenIndex} formValues={formValues} setFormValues={setFormValues} />
                 </AccordionItem>
                 <AccordionItem borderBottom="none">
-                    <PaymentInfo setOpenIndex={setOpenIndex} />
+                    <PaymentInfo setOpenIndex={setOpenIndex} formValues={formValues} setFormValues={setFormValues} />
                 </AccordionItem>
             </Accordion>
         </Box>
