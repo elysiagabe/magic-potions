@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { 
     Box, 
     Flex,
-    Center,
     FormControl,
     FormLabel,
     FormErrorMessage,
@@ -15,83 +14,53 @@ import {
     NumberDecrementStepper,
     Image,
     Text,
-    Button,
-    AccordionPanel,
 } from '@chakra-ui/react';
-
 import FormSectionHeader from './FormSectionHeader';
 import PotionImg from '../../assets/potion.png';
 
-const ProductInfo = ({ setOpenIndex, formValues, setFormValues }) => {
-    const { handleSubmit, errors, register } = useForm();
-
-    const productIndex = 0;
-
-    const handleClick = (values) => {
-        console.log(values)
-        setFormValues({ 
-            ...formValues, 
-            quantity: Number(values.quantity), 
-            total: (values.quantity*49.99).toString(),
-        })
-        setOpenIndex(productIndex + 1)
-    }
-
-    useEffect(() => {
-        // setTotal(formValues.total)
-        console.log(formValues)
-    }, [formValues, setFormValues])
+const ProductInfo = () => {
+    const { errors, register } = useFormContext();
 
     return (
         <Box bg="white" mb={4} boxShadow="xs" >
-            <FormSectionHeader title={"Order Summary"} setOpenIndex={setOpenIndex} index={productIndex} />
+            <FormSectionHeader title={"Order Summary"} />
 
-            <AccordionPanel>
-                <Flex alignItems="center">
+            <Flex alignItems="center">
 
-                    <Image src={PotionImg} alt="white potion bottle against purple background" w={1/3} m={6} />
+                <Image src={PotionImg} alt="white potion bottle against purple background" w={1/3} m={6} />
 
-                    <Box m={6} w="40%">
-                        <Box my={3} >
-                            <Text >Magic Potion</Text>
-                            <Text>$49.99</Text>
-                        </Box>
-                        
-                        {/* QUANTITY */}
-                        <FormControl isRequired isInvalid={errors.quantity} w="100px">
-                            <FormLabel fontSize="sm" htmlFor="quantity">Quantity</FormLabel>
-                            <NumberInput defaultValue={1} min={1} max={3}>
-                                <NumberInputField 
-                                    id="quantity"
-                                    name="quantity"
-                                    ref={register({
-                                        required: "Tell us how many potions you want!",
-                                        max: {
-                                            value: 3,
-                                            message: "You may purchase up to 3 potions"
-                                        }
-                                    })}
-                                />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                            <FormHelperText>Max. 3</FormHelperText>
-                            <FormErrorMessage>{errors.quantity && errors.quantity.message}</FormErrorMessage>
-                        </FormControl>
-
-                        {/* TODO: MAKE DYNAMIC! */}
-                        {/* <Text mt={8} ><Box as="span" fontWeight="500">Total:</Box> {}</Text> */}
+                <Box m={6} w="40%">
+                    <Box my={3} >
+                        <Text >Magic Potion</Text>
+                        <Text>$49.99</Text>
                     </Box>
+                        
+                    {/* QUANTITY */}
+                    <FormControl isRequired isInvalid={errors.quantity} w="100px">
+                        <FormLabel fontSize="sm" htmlFor="quantity">Quantity</FormLabel>
+                        <NumberInput defaultValue={1} min={1} max={3}>
+                            <NumberInputField 
+                                id="quantity"
+                                name="quantity"
+                                ref={register({
+                                    required: "Tell us how many potions you want!",
+                                    max: {
+                                        value: 3,
+                                        message: "You may purchase up to 3 potions"
+                                    }
+                                })}
+                            />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <FormHelperText>Max. 3</FormHelperText>
+                        <FormErrorMessage>{errors.quantity && errors.quantity.message}</FormErrorMessage>
+                    </FormControl>
 
-                </Flex>
-
-                <Center pb={6}>
-                    <Button onClick={handleSubmit(handleClick)} >Proceed to Checkout</Button> 
-                </Center>
-            </AccordionPanel>
-
+                </Box>
+            </Flex>
         </Box>
     )
 }

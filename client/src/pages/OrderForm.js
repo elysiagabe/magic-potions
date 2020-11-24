@@ -1,50 +1,87 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useForm, FormProvider } from 'react-hook-form';
+import axios from 'axios';
 import { 
     Box,
-    Accordion,
-    AccordionItem
+    Button,
+    Center,
+    useToast
 } from '@chakra-ui/react';
 // Components
 import ProductInfo from '../components/orderForm/ProductInfo';
 import CustomerInfo from '../components/orderForm/CustomerInfo';
 import PaymentInfo from '../components/orderForm/PaymentInfo';
 
-const OrderForm = () => {
-    const [openIndex, setOpenIndex] = useState(0)
-    const [formValues, setFormValues] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        quantity: 1,
-        total: '',
-        address: {
-            street1: '',
-            street2: '',
-            city: '',
-            state: '',
-            zip: ''
-        },
-        payment: {
-            ccNum: '',
-            exp: ''
+const OrderForm = ({ setOrderInfo }) => {
+    const history = useHistory();
+    const methods = useForm({
+        defaultValues: {}
+    });
+    const { handleSubmit, formState, watch, reset } = methods;
+    const toast = useToast();
+
+    const watchedQuantity = watch("quantity", 1)
+
+    const handleOrder = (values) => {
+        let newOrder = {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            phone: values.phone,
+            address: {
+                street1: values.street1,
+                street2: values.street2,
+                city: values.city,
+                state: values.state,
+                zip: values.zip
+            },
+            quantity: Number(values.quantity), 
+            total: (values.quantity*49.99).toString(), 
+            payment: {
+                ccNum: values.ccNum,
+                exp: `${values.expMonth}/${values.expYear}`
+            }
         }
 
-    })
+        axios.post('http://localhost:5000/api/magic/', newOrder)
+        .then(res => {
+            setOrderInfo(res.data)
+
+            reset({})
+
+            toast({
+                title: "Order submitted",
+                description: "We hope you love your new potion!",
+                status: "success",
+                duration: "2000",
+                isClosable: true,
+            })
+            history.push("/success")
+        })
+        .catch(err => {
+            toast({
+                title: "Oops! Something went wrong",
+                description: "We're aware of the issue and working to solve it.",
+                status: "error",
+                duration: "2000",
+                isClosable: true
+            })
+        })
+    }
 
     return (
         <Box w={1/2} maxW="1024px"  mx="auto" py={10}>
-            <Accordion index={[openIndex]} allowToggle >
-                <AccordionItem>
-                    <ProductInfo setOpenIndex={setOpenIndex} formValues={formValues} setFormValues={setFormValues} />
-                </AccordionItem>
-                <AccordionItem>
-                    <CustomerInfo setOpenIndex={setOpenIndex} formValues={formValues} setFormValues={setFormValues} />
-                </AccordionItem>
-                <AccordionItem borderBottom="none">
-                    <PaymentInfo setOpenIndex={setOpenIndex} formValues={formValues} setFormValues={setFormValues} />
-                </AccordionItem>
-            </Accordion>
+            <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(handleOrder)}>
+                    <ProductInfo />
+                    <CustomerInfo />
+                    <PaymentInfo watchedQuantity={watchedQuantity} />
+                    <Center>
+                        <Button type="submit" isLoading={formState.isSubmitting}>Submit Order</Button>
+                    </Center>
+                </form>
+            </FormProvider>
         </Box>
     )
 }

@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
 // Components
 import OrderForm from './pages/OrderForm';
+import OrderConfirmation from './pages/OrderConfirmation';
 
 function App() {
+  const [orderInfo, setOrderInfo] = useState({})
+
   return (
-    <Box bg="gray.50" h="100vh">
-      <OrderForm />
+    <Router>
+      <Box bg="gray.50" h="100vh">
+      <Switch>
+        <Route path="/success">
+          <OrderConfirmation orderInfo={orderInfo} />
+        </Route>
+        <Route path="/">
+          <OrderForm setOrderInfo={setOrderInfo} />
+        </Route>
+      </Switch>
     </Box>
+    </Router>
   );
 }
 
