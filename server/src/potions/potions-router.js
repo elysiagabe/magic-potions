@@ -69,7 +69,7 @@ router.patch('/', (req, res) => {
 })
 
 // POST to create new order
-router.post('/', async (req, res) => {
+router.post('/', validatePayment, validateAddress, validateCustomerInfo, validateOrderInfo, async (req, res) => {
     const { firstName, lastName, email, phone, address, payment, quantity, total } = req.body
 
     let error;
@@ -109,8 +109,69 @@ router.post('/', async (req, res) => {
     }
 })
 
+// ~~ MIDDLEWARE ~~ //
+function validatePayment(req, res, next) {
+    let currentYear = Number(new Date().getFullYear().toString().slice(2))
+    let expYr = Number(req.body.payment.exp.slice(3))
 
+    if (req.body.payment.ccNum.length < 1 && req.body.payment.exp.length < 1) {
+        res.status(400).json({ message: "Missing required payment info" })
+    } else if (req.body.payment.ccNum.length < 12 || req.body.payment.ccNum.length > 16) {
+        res.status(400).json({ message: "Invalid credit card number" })
+    } else if (req.body.payment.exp.length < 1 || currentYear > expYr) {
+        res.status(400).json({ message: "Invalid expiration date" })
+    } else {
+        next();
+    }
+}
 
+function validateAddress(req, res, next) {
+    const zipRegex = /^\d{5}(?:[-]\d{4})?$/
+    const zip = req.body.address.zip
 
+    if (req.body.address.street1.length < 1 && req.body.address.city.length < 1 && req.body.address.state.length < 1 && req.body.address.city.zip < 1) {
+        res.status(400).json({ message: "Missing required address info" })
+    } else if (req.body.address.street1.length < 1) {
+        res.status(400).json({ message: "Invalid street address" })
+    } else if (req.body.address.city.length < 1) {
+        res.status(400).json({ message: "Invalid city" })
+    } else if (req.body.address.state.length < 1) {
+        res.status(400).json({ message: "Invalid state" })
+    } else if (!zipRegex.test(zip)) {
+        res.status(400).json({ message: "Invalid zip code" })
+    } else {
+        next()
+    }
+}
+
+function validateCustomerInfo(req, res, next) {
+    if (req.body.firstName.length < 1 && req.body.lastName.length < 1 && req.body.email.length < 1 && req.body.phone.length < 1) {
+        res.status(400).json({ message: "Missing required customer information" })
+    } else if (req.body.firstName.length < 1) {
+        res.status(400).json({ message: "Invalid first name" })
+    } else if (req.body.lastName.length < 1) {
+        res.status(400).json({ message: "Invalid last name" })
+    } else if (req.body.email.length < 3) {
+        res.status(400).json({ message: "Invalid email" })
+    } else if (req.body.phone.length < 7) {
+        res.status(400).json({ message: "Invalid phone number" })
+    } else {
+        next()
+    }
+}
+
+function validateOrderInfo(req, res, next) {
+    const quantityType = typeof req.body.quantity
+
+    if (req.body.quantity.length < 1 && req.body.total.length < 1) {
+        res.status(400).json({ message: "Misisng order information" })
+    } else if (quantityType !== "number" || req.body.quantity < 1 || req.body.quantity > 3) {
+        res.status(400).json({ message: "Invalid order quantity" })
+    } else if (req.body.total !== "49.99" || req.body.total !== "99.98" || req.body.total !== "149.97") {
+        res.status(400).json({ message: "Invalid order total" })
+    } else {
+        next()
+    }
+}
 
 module.exports = router;
