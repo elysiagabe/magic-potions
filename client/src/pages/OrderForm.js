@@ -13,7 +13,7 @@ import ProductInfo from '../components/orderForm/ProductInfo';
 import CustomerInfo from '../components/orderForm/CustomerInfo';
 import PaymentInfo from '../components/orderForm/PaymentInfo';
 
-const OrderForm = ({ setOrderInfo }) => {
+const OrderForm = ({ setOrderInfo, setOrderId }) => {
     const history = useHistory();
     const methods = useForm({
         defaultValues: {}
@@ -46,7 +46,8 @@ const OrderForm = ({ setOrderInfo }) => {
 
         axios.post('http://localhost:5000/api/magic/', newOrder)
         .then(res => {
-            setOrderInfo(res.data)
+            setOrderInfo(newOrder)
+            setOrderId(res.data.id)
 
             reset({})
 

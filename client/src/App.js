@@ -7,16 +7,17 @@ import OrderConfirmation from './pages/OrderConfirmation';
 
 function App() {
   const [orderInfo, setOrderInfo] = useState({})
+  const [orderId, setOrderId] = useState("")
 
   return (
     <Router>
       <Box bg="gray.50" h="100vh">
       <Switch>
         <Route path="/success">
-          <OrderConfirmation orderInfo={orderInfo} />
+          <OrderConfirmation orderInfo={orderInfo} orderId={orderId} />
         </Route>
         <Route path="/">
-          <OrderForm setOrderInfo={setOrderInfo} />
+          <OrderForm setOrderInfo={setOrderInfo} setOrderId={setOrderId} />
         </Route>
       </Switch>
     </Box>
