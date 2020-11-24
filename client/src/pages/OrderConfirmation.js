@@ -15,11 +15,11 @@ const OrderConfirmation = ({ orderInfo, orderId }) => {
                 <Heading size="sm" textTransform="uppercase" letterSpacing=".1rem" color="white" fontWeight="400" >Receipt</Heading>
             </Box>
             <Box bg="white" p={6}>
-                <Text mb={4}><Box as="span" fontWeight="600">Date:</Box> {date}</Text>
+                <Text mb={4}><Box as="span" fontWeight="600">Placed On:</Box> {date}</Text>
                 {orderInfo.address ? 
                     <Flex flexDirection="column">
                         <Text mb={4}><Box as="span" fontWeight="600">Order ID:</Box> {orderId}</Text>
-                        <Text mb={4}>{orderInfo.quantity} magic potion(s)</Text>
+                        <Text mb={4}><Box as="span" fontWeight="600">Items: </Box>{orderInfo.quantity} magic potion(s)</Text>
                         <Text mb={4}><Box as="span" fontWeight="600">Total:</Box> ${orderInfo.total}</Text>
                         <Text fontWeight="600">Billed To: </Text>
                         <Flex flexDirection="column" mb={4}>
