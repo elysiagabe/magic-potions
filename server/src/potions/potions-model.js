@@ -42,7 +42,6 @@ function getPaymentByOrderId(orderId) {
 }
 
 function addBillingInfo(paymentInfo) {
-    console.log({paymentInfo})
     return db('billing_info').insert(paymentInfo, 'id')
 }
 
