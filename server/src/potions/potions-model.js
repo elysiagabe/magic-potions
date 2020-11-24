@@ -11,6 +11,7 @@ module.exports = {
     findCustomerByEmail,
     addOrder,
     deleteOrder,
+    updateOrderStatus,
 }
 
 function getAllOrders() {
@@ -64,4 +65,10 @@ function addOrder(newOrder) {
 
 function deleteOrder(orderId) {
     return db('orders').where('id', orderId).del()
+}
+
+function updateOrderStatus(orderId, fulfilled) {
+    return db('orders as o')
+    .where('id', orderId)
+    .update('fulfilled', fulfilled)
 }

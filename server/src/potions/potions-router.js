@@ -51,6 +51,23 @@ router.delete('/:orderId', (req, res) => {
     })
 })
 
+// PATCH to update fulfilled value
+router.patch('/', (req, res) => {
+    const { id, fulfilled } = req.body
+
+    Potions.updateOrderStatus(id, fulfilled)
+    .then(count => {
+        if (count > 0) {
+            res.status(200).json({ message: 'resource updated successfully' })
+        } else {
+            res.status(404).json({ message: 'resource not found' })
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ message: err.message })
+    })
+})
+
 // POST to create new order
 router.post('/', async (req, res) => {
     const { firstName, lastName, email, phone, address, payment, quantity, total } = req.body
