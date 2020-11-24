@@ -9,7 +9,8 @@ module.exports = {
     addShippingInfo,
     addCustomer,
     findCustomerByEmail,
-    addOrder
+    addOrder,
+    deleteOrder,
 }
 
 function getAllOrders() {
@@ -59,4 +60,8 @@ function findCustomerByEmail(email) {
 
 function addOrder(newOrder) {
     return db('orders').insert(newOrder, 'id')
+}
+
+function deleteOrder(orderId) {
+    return db('orders').where('id', orderId).del()
 }

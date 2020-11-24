@@ -35,6 +35,22 @@ router.get('/:orderId', async (req, res) => {
     }
 })
 
+// DELETE order
+router.delete('/:orderId', (req, res) => {
+    const { orderId } = req.params
+    Potions.deleteOrder(orderId)
+    .then(count => {
+        if(count > 0) {
+            res.json({ message: 'resource deleted successfully'})
+        } else {
+            res.status(404).json({ message: 'resource does not exist'})
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ message: err.message })
+    })
+})
+
 // POST to create new order
 router.post('/', async (req, res) => {
     const { firstName, lastName, email, phone, address, payment, quantity, total } = req.body
@@ -75,5 +91,9 @@ router.post('/', async (req, res) => {
         }
     }
 })
+
+
+
+
 
 module.exports = router;
