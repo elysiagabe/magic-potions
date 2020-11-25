@@ -44,7 +44,7 @@ const OrderForm = ({ setOrderInfo, setOrderId }) => {
             }
         }
 
-        axios.post('http://localhost:5000/api/magic/', newOrder)
+        axios.post('potions-eg.herokuapp.com/api/magic/', newOrder)
         .then(res => {
             setOrderInfo(newOrder)
             setOrderId(res.data.id)
