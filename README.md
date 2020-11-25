@@ -68,7 +68,7 @@ Custom Express middleware is also used on the server-side to validate informatio
 ## Final Thoughts
 #### What I would do differently
 * Given the limited time, I set up very simple input validation that doesn’t necessarily cover all valid cases. For example, customers can’t enter their phone number as (555) 555-5555. I’d do a lot more research into the validation rules I use. 
-* I'd reassess the data model and make sure it makes sense. For example, the way the db is set up now, I have the foreign keys that link the customers table with the billing_info and shipping_info tables in the customers table. After thinking more in depth, I’d likely place the a customerID foreign key in both the billing_info and shipping_info table and/or add a shippingID and billingID foreign keys the orders table. If users are granted permission to place multiple orders, this could allow them to have different billing and shipping information saved to their account and associated with each order. 
+* I'd reassess the data model and make sure it makes sense. For example, I could update the schema and relationships between tables to allow customer records to be assocaited with multiple shipping or billing information records. This could allow the customer to save different credit cards in their account and select which one they want to use when they place an order. 
 * Implement media breakpoints and responsive styles for better experience on a small screen
 * Reassess and improve file structure
 * Add tests
