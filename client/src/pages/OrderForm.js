@@ -63,7 +63,7 @@ const OrderForm = ({ setOrderInfo, setOrderId }) => {
         .catch(err => {
             toast({
                 title: "Oops! Something went wrong",
-                description: "We're aware of the issue and working to solve it.",
+                description: err.response.data.message,
                 status: "error",
                 duration: "2000",
                 isClosable: true
