@@ -64,3 +64,19 @@ Chakra UI provides excellent support for refs in their Input components, which a
 Input validation is handled when form is submitted with React Hook Form's handleSubmit function. If errors are present, error message(s) are displayed to the user under the corresponding input(s). Once user fixes input validation issue, error message is no longer displayed. If no error are present on submission, the input values are passed to a handleOrder function, which then uses those values to create a newOrder object and makes a POST request to the API. Client-side validation allows immediate feedback to the user, creating a better user experience and leading to a higher chance that the order will be submitted successfully. 
 
 Custom Express middleware is also used on the server-side to validate information on the POST request before adding to the database. This ensures information being received is, indeed, valid before storing the new order in the event that client-side restrictions are bypassed. This helps protect against malicious attacks. 
+
+## Final Thoughts
+#### What I would do differently
+* Given the limited time, I set up very simple input validation that doesn’t necessarily cover all valid cases. For example, customers can’t enter their phone number as (555) 555-5555. I’d do a lot more research into the validation rules I use. 
+* I'd reassess the data model and make sure it makes sense. For example, the way the db is set up now, I have the foreign keys that link the customers table with the billing_info and shipping_info tables in the customers table. After thinking more in depth, I’d likely place the a customerID foreign key in both the billing_info and shipping_info table and/or add a shippingID and billingID foreign keys the orders table. If users are granted permission to place multiple orders, this could allow them to have different billing and shipping information saved to their account and associated with each order. 
+* Implement media breakpoints and responsive styles for better experience on a small screen
+* Reassess and improve file structure
+* Add tests
+
+#### Ideas to improve/scale
+* Implement TypeScript to catch type errors before they happen
+* Add address validation with an external API, like Google’s geocoding API or SmartyStreet
+* Add support for international customers (phone number, address fields)
+* Add user account creation and authentication
+* Integrate with a payment platform, like Stripe or Braintree to handle payment information verification
+* Send transactional emails to customer with order confirmation/receipt and shipping information with an email delivery platform, like SendGrid
