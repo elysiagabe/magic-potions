@@ -21,7 +21,7 @@ const CustomerInfo = () => {
     const { errors, register } = useFormContext();
 
     return (
-        <Box bg="white" mb={4} boxShadow="xs">
+        <Box bg="white" pb={4} mb={4} boxShadow="xs">
             <FormSectionHeader title={"Customer Information"} />
             <Box m={6}>
                 <Flex justifyContent="space-between" >
