@@ -11,7 +11,7 @@ function App() {
 
   return (
     <Router>
-      <Box bg="gray.50" h="100vh">
+      <Box bg="gray.50">
       <Switch>
         <Route path="/success">
           <OrderConfirmation orderInfo={orderInfo} orderId={orderId} />
